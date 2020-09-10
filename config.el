@@ -74,10 +74,16 @@
       "p e"
       #'project-eshell)
 
+;; TODO - try to make it search symbol-at-point by default
 (map! :leader
       :desc "Search in project"
       "/"
       #'+ivy/project-search)
+
+(map! :leader
+      :desc "Fuzzy search in project"
+      "SPC"
+      #'counsel-fzf)
 
 (add-hook 'eshell-preoutput-filter-functions 'ansi-color-apply)
 
