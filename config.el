@@ -74,6 +74,11 @@
       "p e"
       #'project-eshell)
 
+(map! :leader
+      :desc "Search in project"
+      "/"
+      #'+ivy/project-search)
+
 (add-hook 'eshell-preoutput-filter-functions 'ansi-color-apply)
 
 (after! magit
