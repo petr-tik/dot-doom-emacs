@@ -67,7 +67,8 @@
         rustic-format-on-save t))
 
 (after! lsp-mode
-  (setq lsp-enable-folding t))
+  (setq lsp-enable-folding t)
+  (setq lsp-clients-clangd-args '("--clang-tidy" "-j=12")))
 
 (map! :leader
       :desc "eshell in project root"
