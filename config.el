@@ -68,7 +68,7 @@
 
 (after! lsp-mode
   (setq lsp-enable-folding t)
-  (setq lsp-clients-clangd-args '("--clang-tidy" "-j=12")))
+  (setq lsp-clients-clangd-args '("--clang-tidy" "-j=12" "--log=verbose" "--pch-storage=memory" "--query-driver=/usr/bin/c++")))
 
 (map! :leader
       :desc "eshell in project root"
@@ -86,7 +86,16 @@
       "SPC"
       #'counsel-fzf)
 
+(map! :after lsp-mode
+      :map (rustic-mode-map c++-mode-map)
+      :localleader
+      :nv "=" #'lsp-format-buffer)
+
 (add-hook 'eshell-preoutput-filter-functions 'ansi-color-apply)
 
 (after! magit
   (setq magit-bury-buffer-function #'magit-mode-quit-window))
+
+
+(custom-set-faces!
+  '(font-lock-comment-face :foreground "#C2B493" :slant italic))
