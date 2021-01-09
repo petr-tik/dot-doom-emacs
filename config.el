@@ -56,7 +56,7 @@
 (use-package! org
   :config
   (setq org-directory "~/org"
-        org-agenda-files (directory-files org-directory nil ".+\.org")
+        org-agenda-files (directory-files org-directory t ".+\.org")
         org-refile-targets '((nil :maxlevel . 9)
                              (org-agenda-files :maxlevel . 9))
         org-refile-use-outline-path 'file
@@ -69,17 +69,31 @@
 (after! lsp-mode
   (setq lsp-enable-folding t)
   (setq lsp-clients-clangd-args '("--clang-tidy" "-j=12" "--log=verbose" "--pch-storage=memory" "--query-driver=/usr/bin/c++"))
+  (setq lsp-idle-delay 0.2)
+  ;; defaults to 128 - this puppy has enough RAM
+  ;; https://rust-analyzer.github.io/manual.html
+  (setq lsp-rust-analyzer-lru-capacity 1024)
   (lsp-register-client
    (make-lsp-client :new-connection (lsp-tramp-connection "pyls")
                     :major-modes '(python-mode)
                     :remote? t
-                    :server-id 'pyls-remote))
-  )
+                    :server-id 'pyls-remote)))
 
 (map! :leader
       :desc "eshell in project root"
       "p e"
       #'project-eshell)
+
+(map! :leader
+      :desc "Find file other window"
+      "f o"
+      #'find-file-other-window)
+
+(map! :leader
+      :desc "Switch to buffer other window"
+      "b o"
+      #'projectile-switch-to-buffer-other-window)
+
 
 ;; TODO - try to make it search symbol-at-point by default
 (map! :leader
@@ -99,6 +113,9 @@
 
 (add-hook 'eshell-preoutput-filter-functions 'ansi-color-apply)
 
+(after! evil
+  (evil-set-initial-state 'comint-mode 'normal))
+
 (after! magit
   (setq magit-bury-buffer-function #'magit-mode-quit-window))
 
@@ -109,8 +126,6 @@
   (add-to-list 'tramp-connection-properties
                (list (regexp-quote "/ssh:petr_tik@192.*:")
                      "remote-shell" "/bin/bash")))
-
-
 
 (custom-set-faces!
   '(font-lock-comment-face :foreground "#C2B493" :slant italic))

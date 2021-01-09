@@ -50,3 +50,25 @@
 ;(unpin! t)
 ;
 (package! lsp-treemacs)
+
+(disable-packages!
+ ccls
+ ;; pytest >>> nose
+ nose
+ ;; anaconda is only enabled if lsp isn't present. I intend to go full lsp
+ anaconda-mode
+ ;; needed to delete company-anaconda to make sure anaconda is gone
+ company-anaconda
+ pipenv
+ pyvenv
+ ;; cpp mode that I am unlikely to need
+ ;; unlikely that I will need it
+ cuda-mode
+ opencl-mode
+ glsl-mode
+ company-glsl
+ ;; pcre2el is quite a big package only needed by magit-todos
+ ;; remove both
+ pcre2el
+ magit-todos
+)
