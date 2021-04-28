@@ -52,6 +52,7 @@
 ;;
 (setq doom-localleader-key ",")
 
+(load! "+global_maps.el")
 
 (use-package! org
   :config
@@ -66,50 +67,39 @@
   (setq rustic-lsp-server 'rust-analyzer
         rustic-format-on-save t))
 
-(after! lsp-mode
+(use-package lsp-mode
+  :config
   (setq lsp-enable-folding t)
   (setq lsp-clients-clangd-args '("--clang-tidy" "-j=12" "--log=verbose" "--pch-storage=memory" "--query-driver=/usr/bin/c++"))
   (setq lsp-idle-delay 0.2)
   ;; defaults to 128 - this puppy has enough RAM
   ;; https://rust-analyzer.github.io/manual.html
   (setq lsp-rust-analyzer-lru-capacity 1024)
+
   (lsp-register-client
    (make-lsp-client :new-connection (lsp-tramp-connection "pyls")
                     :major-modes '(python-mode)
                     :remote? t
-                    :server-id 'pyls-remote)))
+                    :server-id 'pyls-remote))
 
-(map! :leader
-      :desc "eshell in project root"
-      "p e"
-      #'project-eshell)
-
-(map! :leader
-      :desc "Find file other window"
-      "f o"
-      #'find-file-other-window)
-
-(map! :leader
-      :desc "Switch to buffer other window"
-      "b o"
-      #'projectile-switch-to-buffer-other-window)
+  (map! :map (rustic-mode-map c++-mode-map python-mode-map)
+        :localleader
+        :nv "=" #'lsp-format-buffer)
+  ;; TODO expose the lsp-command-map under SPC l
+  (map! :leader "l" lsp-command-map)
+) ; lsp-mode
 
 
-;; TODO - try to make it search symbol-at-point by default
-(map! :leader
-      :desc "Search in project"
-      "/"
-      #'+ivy/project-search)
+(use-package project
+  :config
+  (add-to-list 'project-switch-commands '(?z "fzf" counsel-fzf))
+  (add-to-list 'project-switch-commands '(?m "Magit" magit-status))
 
-(map! :leader
-      :desc "Fuzzy search in project"
-      "SPC"
-      #'counsel-fzf)
-
-(map! :after lsp-mode
-      :map (rustic-mode-map c++-mode-map python-mode-map)
-      :localleader
-      :nv "=" #'lsp-format-buffer)
+  (map! :leader
+        :desc "eshell in project root"
+        "p e"
+        #'project-eshell)
+)
 
 (add-hook 'eshell-preoutput-filter-functions 'ansi-color-apply)
 
