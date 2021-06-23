@@ -85,8 +85,8 @@
   (map! :map (rustic-mode-map c++-mode-map python-mode-map)
         :localleader
         :nv "=" #'lsp-format-buffer)
-  ;; TODO expose the lsp-command-map under SPC l
-  (map! :leader "l" lsp-command-map)
+  ;; FIXME give prefixes descriptive/category names - currently they are all marked as "g prefix" et al
+  (map! :leader "l" lsp-mode-map)
 ) ; lsp-mode
 
 
@@ -100,6 +100,11 @@
         "p e"
         #'project-eshell)
 )
+
+(use-package counsel
+  :config
+  ;; find all files, sort most recently modified first and cut to only show filenames
+  (setq counsel-fzf-cmd (concat doom-projectile-fd-binary " . --type f --exec stat --printf='%%y %%n\\n' | sort -nr | cut -d' ' -f4")))
 
 (add-hook 'eshell-preoutput-filter-functions 'ansi-color-apply)
 
