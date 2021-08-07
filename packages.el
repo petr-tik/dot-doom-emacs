@@ -72,3 +72,6 @@
  pcre2el
  magit-todos
 )
+
+(unpin! lsp-mode)
+(unpin! magit)
