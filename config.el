@@ -54,6 +54,15 @@
 
 (load! "+global_maps.el")
 
+(defun pt/memory-multiplier ()
+
+)
+
+(defun pt/cores-multiplier ()
+
+)
+
+
 (use-package! org
   :config
   (setq org-directory "~/org"
@@ -72,8 +81,18 @@
   (setq lsp-enable-folding t)
   (setq lsp-clients-clangd-args '("--clang-tidy" "-j=12" "--log=verbose" "--pch-storage=memory" "--query-driver=/usr/bin/c++"))
   (setq lsp-idle-delay 0.2)
+
+  ;; TODO implement a function that adjusts memory-related configs based on
+  ;; the resources of the box
+  ;; sadly not TRAMP-friendly
+  ;;   (defun pt/memory-multiplier ()
+  ;;     "Return a factor to multiply default memory-related config values by.
+  ;; Useful to improve performance when using a box with more memory"
+  ;;     (let (ram-in-gb (/ (car (memory-info)) (* 1024 1024)))))
+
+
   ;; defaults to 128 - this puppy has enough RAM
-  ;; https://rust-analyzer.github.io/manual.html
+  ;; https://rust-analyzer.github.io/manual.html#configuration
   (setq lsp-rust-analyzer-lru-capacity 1024)
 
   (lsp-register-client
@@ -103,6 +122,8 @@
 
 (use-package projectile
   :config
+  (setq projectile-project-search-path '("~/Coding/rust/" "~/org"))
+
   (map! :leader
         :desc "Switch to buffer other window"
         "b o"
@@ -135,7 +156,10 @@
         :desc "Fuzzy search in project"
         "SPC"
         #'counsel-fzf)
-  )
+  ;; TODO project switch action to open fzf in the project directory
+  ;; this works when evaluated, so maybe i can do that
+  ;; (counsel-fzf nil ivy-current-prefix-arg)
+)
 
 (add-hook 'eshell-preoutput-filter-functions 'ansi-color-apply)
 
@@ -166,4 +190,19 @@ other buffers in the selected window."
                (list (regexp-quote "/ssh:petr_tik@192.*:")
                      "remote-shell" "/bin/bash")))
 
+(use-package! cc-mode
+;; TODO expand `cc-imenu-c++-generic-expression' to recognise gtest macros
+;; like TEST(FirstLabel, SecondLabel)
+    )
+
+
+
+
+;; TODO bring compilation and comint-mode derived buffers
+;; to the workspace
+;; (add-hook! 'doom-real-buffer-functions
+;;   (defun pt/compilation-buffers-are-real (buf)
+;;     (with-current-buffer buf
+;;       (or (derived-mode-p 'comint-mode)
+;;            (derived-mode-p 'compilation-mode)))))
 
