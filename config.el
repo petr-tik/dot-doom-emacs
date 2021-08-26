@@ -101,10 +101,37 @@
         #'project-eshell)
 )
 
+(use-package projectile
+  :config
+  (map! :leader
+        :desc "Switch to buffer other window"
+        "b o"
+        #'projectile-switch-to-buffer-other-window)
+)
+
+(use-package ivy
+  :config
+  (setq ivy-height 20)
+
+  ;; TODO - try to make it search symbol-at-point by default
+  ;; if `doom-thing-at-point-or-region' is truthy, start search with that,
+  ;; else start a project search
+  (map! :leader
+        :desc "Search in project"
+        "/"
+        #'+ivy/project-search)
+  )
+
 (use-package counsel
   :config
   ;; find all files, sort most recently modified first and cut to only show filenames
-  (setq counsel-fzf-cmd (concat doom-projectile-fd-binary " . --type f --exec stat --printf='%%y %%n\\n' | sort -nr | cut -d' ' -f4")))
+  (setq counsel-fzf-cmd (concat doom-projectile-fd-binary " . --type f --exec stat --printf='%%y %%n\\n' | sort -nr | cut -d' ' -f4 | fzf -f \"%s\""))
+
+  (map! :leader
+        :desc "Fuzzy search in project"
+        "SPC"
+        #'counsel-fzf)
+  )
 
 (add-hook 'eshell-preoutput-filter-functions 'ansi-color-apply)
 
@@ -134,3 +161,5 @@ other buffers in the selected window."
   (add-to-list 'tramp-connection-properties
                (list (regexp-quote "/ssh:petr_tik@192.*:")
                      "remote-shell" "/bin/bash")))
+
+

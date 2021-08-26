@@ -67,9 +67,6 @@
  opencl-mode
  glsl-mode
  company-glsl
- ;; pcre2el is quite a big package only needed by magit-todos
- ;; remove both
- pcre2el
  magit-todos
 )
 
