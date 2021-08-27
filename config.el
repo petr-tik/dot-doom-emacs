@@ -113,14 +113,18 @@
   :config
   (setq ivy-height 20)
 
-  ;; TODO - try to make it search symbol-at-point by default
-  ;; if `doom-thing-at-point-or-region' is truthy, start search with that,
-  ;; else start a project search
+  (defun pt/project-search-at-point-or-blank ()
+    "Be clever - search symbol at point if it exists or start a blank search"
+    (interactive)
+    (if-let (sym (doom-thing-at-point-or-region))
+        (+default/search-project-for-symbol-at-point sym))
+    (+default/search-project))
+
   (map! :leader
         :desc "Search in project"
         "/"
-        #'+ivy/project-search)
-  )
+        #'pt/project-search-at-point-or-blank)
+)
 
 (use-package counsel
   :config
