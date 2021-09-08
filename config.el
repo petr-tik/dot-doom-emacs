@@ -54,7 +54,13 @@
 
 (load! "+global_maps.el")
 
-(defun pt/memory-multiplier ()
+(defun pt/adjust-for-host-ram (initial-value)
+  "Return the initial value adjusted for the RAM available on the emacs host"
+  ;; sadly not TRAMP-friendly because memory-info runs on the emacs host
+  (let* ((ram-in-gb (/ (car (memory-info)) (* 1024 1024)))
+         (smallest-ram-available 8.0)
+         (factor (log ram-in-gb smallest-ram-available)))
+    (floor (* factor initial-value))))
 
 )
 
@@ -82,18 +88,9 @@
   (setq lsp-clients-clangd-args '("--clang-tidy" "-j=12" "--log=verbose" "--pch-storage=memory" "--query-driver=/usr/bin/c++"))
   (setq lsp-idle-delay 0.2)
 
-  ;; TODO implement a function that adjusts memory-related configs based on
-  ;; the resources of the box
-  ;; sadly not TRAMP-friendly
-  ;;   (defun pt/memory-multiplier ()
-  ;;     "Return a factor to multiply default memory-related config values by.
-  ;; Useful to improve performance when using a box with more memory"
-  ;;     (let (ram-in-gb (/ (car (memory-info)) (* 1024 1024)))))
-
-
-  ;; defaults to 128 - this puppy has enough RAM
   ;; https://rust-analyzer.github.io/manual.html#configuration
-  (setq lsp-rust-analyzer-lru-capacity 1024)
+  ;; defaults to 128 - let's adjust that for available RAM
+  (setq lsp-rust-analyzer-lru-capacity `(,@(pt/adjust-for-host-ram 128)))
 
   (lsp-register-client
    (make-lsp-client :new-connection (lsp-tramp-connection "pyls")
