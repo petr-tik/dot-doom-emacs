@@ -62,12 +62,9 @@
          (factor (log ram-in-gb smallest-ram-available)))
     (floor (* factor initial-value))))
 
-)
-
-(defun pt/cores-multiplier ()
-
-)
-
+(defun pt/adjust-for-cores (initial-value)
+  ;; TODO use `doom-system-cpus'
+  )
 
 (use-package! org
   :config
@@ -85,6 +82,7 @@
 (use-package lsp-mode
   :config
   (setq lsp-enable-folding t)
+  ;; TODO                                         adjust the number of workers with `pt/adjust-for-cores'
   (setq lsp-clients-clangd-args '("--clang-tidy" "-j=12" "--log=verbose" "--pch-storage=memory" "--query-driver=/usr/bin/c++"))
   (setq lsp-idle-delay 0.2)
 
@@ -153,7 +151,7 @@
         :desc "Fuzzy search in project"
         "SPC"
         #'counsel-fzf)
-  ;; TODO project switch action to open fzf in the project directory
+  ;; TODO `+workspaces-switch-project-function' switch action to open fzf in the project directory
   ;; this works when evaluated, so maybe i can do that
   ;; (counsel-fzf nil ivy-current-prefix-arg)
 )
