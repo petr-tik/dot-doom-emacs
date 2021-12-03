@@ -73,3 +73,5 @@
 
 (unpin! lsp-mode)
 (unpin! magit)
+
+(package! ibuffer-projectile :disable t)
