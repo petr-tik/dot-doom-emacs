@@ -72,19 +72,21 @@
         org-refile-use-outline-path 'file
         org-refile-allow-creating-parent-nodes 'confirm))
 
-(after! rustic
+(after! (rustic lsp-mode)
   (setq rustic-lsp-server 'rust-analyzer
-        rustic-format-on-save t))
+        rustic-format-on-save t)
+
+  ;; https://rust-analyzer.github.io/manual.html#configuration
+  ;; defaults to 128 - let's adjust that for available RAM
+  (setq lsp-rust-analyzer-lru-capacity `(,@(pt/adjust-for-host-ram 128))))
 
 (use-package lsp-mode
   :config
   (setq lsp-enable-folding t)
   (setq lsp-clients-clangd-args '("--clang-tidy" "-j=12" "--log=verbose" "--pch-storage=memory" "--query-driver=/usr/bin/c++"))
   (setq lsp-idle-delay 0.2)
+  (setq lsp-pylsp-plugins-flake8-max-line-length 100)
 
-  ;; https://rust-analyzer.github.io/manual.html#configuration
-  ;; defaults to 128 - let's adjust that for available RAM
-  (setq lsp-rust-analyzer-lru-capacity `(,@(pt/adjust-for-host-ram 128)))
 
   (lsp-register-client
    (make-lsp-client :new-connection (lsp-tramp-connection "pyls")
