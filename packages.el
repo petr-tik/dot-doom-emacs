@@ -75,3 +75,5 @@
 (unpin! magit)
 
 (package! ibuffer-projectile :disable t)
+(package! systemd)
+(package! bazel)

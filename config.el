@@ -62,6 +62,12 @@
          (factor (log ram-in-gb smallest-ram-available)))
     (floor (* factor initial-value))))
 
+(defun pt/kill-from-shell (&optional input)
+  (interactive "sYank command: ")
+  (if-let (non-empty-return (string-trim-right (shell-command-to-string input)))
+      (kill-new non-empty-return)
+    (message "Shell command %s returned nothing" input)))
+
 
 (use-package! org
   :config
@@ -168,7 +174,8 @@ other buffers in the selected window."
 
   (setq magit-bury-buffer-function #'magit-mode-quit-window
         git-commit-major-mode 'org-mode
-        magit-display-buffer-function 'pt/magit-display-buffer-same-window-but-diff-log-proc))
+        magit-display-buffer-function 'pt/magit-display-buffer-same-window-but-diff-log-proc)
+  (setq! magit-list-refs-sortby '("-committerdate" "-creatordate")))
 
 
 (use-package! tramp
