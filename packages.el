@@ -77,3 +77,7 @@
 (package! ibuffer-projectile :disable t)
 (package! systemd)
 (package! bazel)
+
+
+(package! igor
+  :recipe (:host github :repo "fitzgibbon/igor"))
