@@ -135,7 +135,7 @@
     "Be clever - search symbol at point if it exists or start a blank search"
     (interactive)
     (if-let (sym (doom-thing-at-point-or-region))
-        (+default/search-project-for-symbol-at-point sym))
+        (+default/search-project-for-symbol-at-point sym default-directory))
     (+default/search-project))
 
   (map! :leader
