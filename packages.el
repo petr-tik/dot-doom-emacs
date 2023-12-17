@@ -50,6 +50,7 @@
 ;(unpin! t)
 ;
 (package! lsp-treemacs)
+(package! bazel)
 
 (disable-packages!
  ccls

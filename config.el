@@ -176,4 +176,7 @@ other buffers in the selected window."
                (list (regexp-quote "/ssh:petr_tik@192.*:")
                      "remote-shell" "/bin/bash")))
 
-
+(use-package! bazel
+ :custom
+ (bazel-command '("bazelisk"))
+)
