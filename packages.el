@@ -74,6 +74,7 @@
 (unpin! lsp-mode)
 (unpin! magit)
 
+(package! with-editor)
 (package! ibuffer-projectile :disable t)
 (package! systemd)
 (package! bazel)
