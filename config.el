@@ -189,3 +189,11 @@ other buffers in the selected window."
  :custom
  (bazel-command '("bazelisk"))
 )
+
+(use-package! gptel
+  :config
+  (setq
+   gptel-model "llama3.1:latest"
+   gptel-backend (gptel-make-ollama "Ollama"
+                                    :host "localhost:11434"
+                                    :models '("llama3.1:latest"))))

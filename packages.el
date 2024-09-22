@@ -81,3 +81,4 @@
 
 (package! igor
   :recipe (:host github :repo "fitzgibbon/igor"))
+(package! gptel)
