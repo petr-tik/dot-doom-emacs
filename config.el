@@ -190,6 +190,13 @@ other buffers in the selected window."
  (bazel-command '("bazelisk"))
 )
 
+(after! dap-mode
+  (setq dap-python-debugger 'debugpy)
+  (setq dap-python-executable "python3.8")
+  (setq dap-ui-locals-expand-depth t)
+  (setq dap-auto-configure-features '(locals breakpoints controls repl)))
+
+
 (use-package! gptel
   :config
   (setq
