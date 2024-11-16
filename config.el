@@ -190,7 +190,9 @@ other buffers in the selected window."
  (bazel-command '("bazelisk"))
 )
 
-(after! dap-mode
+(use-package! dap-mode
+  :init
+  (require 'dap-python)
   (setq dap-python-debugger 'debugpy)
   (setq dap-python-executable "python3.8")
   (setq dap-ui-locals-expand-depth t)
