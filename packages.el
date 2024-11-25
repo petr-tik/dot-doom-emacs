@@ -79,6 +79,4 @@
 (package! systemd)
 (package! bazel)
 
-(package! igor
-  :recipe (:host github :repo "fitzgibbon/igor"))
 (package! gptel :pin nil)
