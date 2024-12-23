@@ -205,4 +205,4 @@ other buffers in the selected window."
    gptel-model "llama3.1:latest"
    gptel-backend (gptel-make-ollama "Ollama"
                                     :host "localhost:11434"
-                                    :models '("llama3.1:latest" "llama3.2:latest" "llama3.2:1b"))))
+                                    :models '(llama3.1:latest llama3.2:latest llama3.2:1b))))
