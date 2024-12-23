@@ -54,10 +54,22 @@
 
 (load! "+global_maps.el")
 
+(defun available-ram-in-gb ()
+  "Return the total available RAM in GB, using appropriate methods based on the OS."
+  (cond
+   ((eq system-type 'darwin) ; macOS
+    (let* ((hardware-info (shell-command-to-string "sysctl hw.memsize"))
+           (ram-in-bytes (string-to-number (car (last (split-string hardware-info ":"))))))
+      (/ ram-in-bytes (* 1024 1024 1024))))
+   ((eq system-type 'gnu/linux) ; Linux
+    (/ (car (memory-info)) (* 1024 1024)))
+   (t
+    (error "Unsupported operating system")))) 
+
 (defun pt/adjust-for-host-ram (initial-value)
   "Return the initial value adjusted for the RAM available on the emacs host"
   ;; sadly not TRAMP-friendly because memory-info runs on the emacs host
-  (let* ((ram-in-gb (/ (car (memory-info)) (* 1024 1024)))
+  (let* ((ram-in-gb (available-ram-in-gb))
          (smallest-ram-available 8.0)
          (factor (log ram-in-gb smallest-ram-available)))
     (floor (* factor initial-value))))
